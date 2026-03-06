@@ -13,6 +13,7 @@ struct PhysicalFlip: View {
     @State private var useDoctrineAndCovenants: Bool = true
     @State private var usePearlOfGreatPrice: Bool = true
     @State private var showVolume: Bool = false
+    @State private var isSettingsLocked: Bool = false
     
     @State private var score = 0
     @State private var recentScore = 0
@@ -25,6 +26,16 @@ struct PhysicalFlip: View {
     @State private var currentLocation: String = ""
         
     @State private var allowedVolumes: [Int] = []
+    
+    func chooseRandomLocation() {
+        let randomVolume = allowedVolumes.randomElement()!
+        let randomBook = books[randomVolume].randomElement()!
+        let randomBookIndex = books[randomVolume].firstIndex(of: randomBook)!
+        // Below line of code has been edited for debugging purposes and must be changed back after debugging session. If this comment is visible after a commit, then someone must have forgotten their brain today.
+        let randomChapter = chapters[randomVolume][randomBookIndex]//Int.random(in: 1...chapters[randomVolumeIndex][randomBookIndex])
+        
+        currentLocation = "\(randomBook) \(randomChapter)\(showVolume ? "\n\(volumes[randomVolume])" : "")"
+    }
     
     var volumes: [String] = [
         "Old Testament",
@@ -122,20 +133,14 @@ struct PhysicalFlip: View {
                                 isPlaying = false
                                 elapsedTime = Date().timeIntervalSince(startTime!)
                                 
-                                score -= Int(elapsedTime) * 10
+                                score -= Int(elapsedTime / 2)
                                 
                                 if score > bestScore {
                                     bestScore = score
                                 }
                                 recentScore = score
                             } else {
-                                let randomVolume = allowedVolumes.randomElement()!
-                                let randomVolumeIndex = allowedVolumes.firstIndex(of: randomVolume)!
-                                let randomBook = books[randomVolume].randomElement()!
-                                let randomBookIndex = books[randomVolume].firstIndex(of: randomBook)!
-                                let randomChapter = Int.random(in: 0...chapters[randomVolumeIndex][randomBookIndex])
-                                
-                                currentLocation = "\(randomBook) \(randomChapter)\(showVolume ? "\n\(volumes[randomVolume])" : "")"
+                                chooseRandomLocation()
                             }
                         } label: {
                             Image(systemName: "checkmark")
@@ -174,31 +179,49 @@ struct PhysicalFlip: View {
             isPlaying = true
             startTime = Date()
             
-            let randomVolume = allowedVolumes.randomElement()!
-            let randomVolumeIndex = allowedVolumes.firstIndex(of: randomVolume)!
-            let randomBook = books[randomVolume].randomElement()!
-            let randomBookIndex = books[randomVolume].firstIndex(of: randomBook)!
-            let randomChapter = Int.random(in: 0...chapters[randomVolumeIndex][randomBookIndex])
-            
-            currentLocation = "\(randomBook) \(randomChapter)\(showVolume ? "\n\(volumes[randomVolume])" : "")"
+            chooseRandomLocation()
         }
     }
     
     private var setup: some View {
         HStack {
             VStack(alignment: .leading, spacing: 20) {
+                Group {
+                    if isSettingsLocked {
+                        Button {
+                            isSettingsLocked = false
+                        } label: {
+                            Image(systemName: "lock.fill")
+                        }
+                        .buttonStyle(BorderedProminentButtonStyle())
+                    } else {
+                        Button {
+                            isSettingsLocked = true
+                        } label: {
+                            Image(systemName: "lock.open.fill")
+                        }
+                        .buttonStyle(BorderedButtonStyle())
+                    }
+                }
+                
                 Toggle("Use Old Testament", isOn: $useOldTestament)
+                    .disabled(isSettingsLocked)
                 Toggle("Use New Testament", isOn: $useNewTestament)
+                    .disabled(isSettingsLocked)
                 Toggle("Use Book of Mormon", isOn: $useBookOfMormon)
+                    .disabled(isSettingsLocked)
                 Toggle("Use Doctrine and Covenants", isOn: $useDoctrineAndCovenants)
+                    .disabled(isSettingsLocked)
                 Toggle("Use Pearl of Great Price", isOn: $usePearlOfGreatPrice)
+                    .disabled(isSettingsLocked)
                 
                 Spacer()
                 
-                Toggle("Show Volume", isOn: $showVolume)
+                Toggle("Show Full Location", isOn: $showVolume)
+                    .disabled(isSettingsLocked)
             }
             .padding()
-            .background(.secondary.opacity(0.3))
+            .background(.secondary.opacity(0.15))
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             .cornerRadius(30)
             
@@ -233,7 +256,7 @@ struct PhysicalFlip: View {
                     Spacer()
                 }
                 .padding()
-                .background(.secondary.opacity(0.3))
+                .background(.secondary.opacity(0.15))
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                 .cornerRadius(30)
                 
