@@ -1,3 +1,9 @@
+/*
+    Created by Random Meow in March 2026
+    You may use any code here as long as you give credit
+    Thanks
+*/
+
 import SwiftUI
 
 struct HomeView: View {
