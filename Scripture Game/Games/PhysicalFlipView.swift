@@ -132,7 +132,7 @@ struct PhysicalFlip: View {
                                 isPlaying = false
                                 elapsedTime = Date().timeIntervalSince(startTime!)
                                 
-                                score -= Int(elapsedTime / 2)
+                                score -= Int(elapsedTime * 2)
                                 
                                 if score > bestScore {
                                     bestScore = score
