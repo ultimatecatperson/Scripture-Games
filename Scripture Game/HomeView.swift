@@ -11,6 +11,7 @@ struct HomeView: View {
         NavigationStack {
             HStack {
                 GameButton(title: "Physical Flip", destination: { PhysicalFlip() })
+                GameButton(title: "Find the Topic", destination: { FindTheTopic() })
             }
             .padding()
             .navigationTitle("Games")

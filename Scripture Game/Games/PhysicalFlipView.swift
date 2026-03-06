@@ -103,7 +103,7 @@ struct PhysicalFlip: View {
                     
                     if isPlaying {
                         VStack {
-                            Text("\(completedLevels + 1) / 10")
+                            Text("\(completedLevels + 1) / 5")
                                 .font(.system(size: 30))
                                 .fontWeight(.bold)
                                 .fontDesign(.default)
@@ -126,13 +126,13 @@ struct PhysicalFlip: View {
                     if isPlaying {
                         Button {
                             completedLevels += 1
-                            score += 100
+                            score += 200
                             
-                            if completedLevels == 10 {
+                            if completedLevels == 5 {
                                 isPlaying = false
                                 elapsedTime = Date().timeIntervalSince(startTime!)
                                 
-                                score -= Int(elapsedTime * 2)
+                                score -= Int(elapsedTime * 4)
                                 
                                 if score > bestScore {
                                     bestScore = score
@@ -203,21 +203,27 @@ struct PhysicalFlip: View {
                     }
                 }
                 
-                Toggle("Use Old Testament", isOn: $useOldTestament)
-                    .disabled(isSettingsLocked)
-                Toggle("Use New Testament", isOn: $useNewTestament)
-                    .disabled(isSettingsLocked)
-                Toggle("Use Book of Mormon", isOn: $useBookOfMormon)
-                    .disabled(isSettingsLocked)
-                Toggle("Use Doctrine and Covenants", isOn: $useDoctrineAndCovenants)
-                    .disabled(isSettingsLocked)
-                Toggle("Use Pearl of Great Price", isOn: $usePearlOfGreatPrice)
-                    .disabled(isSettingsLocked)
-                
-                Spacer()
-                
-                Toggle("Show Full Location", isOn: $showVolume)
-                    .disabled(isSettingsLocked)
+                ScrollView {
+                    VStack(spacing: 12) {
+                        Toggle("Use Old Testament", isOn: $useOldTestament)
+                            .disabled(isSettingsLocked)
+                        Toggle("Use New Testament", isOn: $useNewTestament)
+                            .disabled(isSettingsLocked)
+                        Toggle("Use Book of Mormon", isOn: $useBookOfMormon)
+                            .disabled(isSettingsLocked)
+                        Toggle("Use Doctrine and Covenants", isOn: $useDoctrineAndCovenants)
+                            .disabled(isSettingsLocked)
+                        Toggle("Use Pearl of Great Price", isOn: $usePearlOfGreatPrice)
+                            .disabled(isSettingsLocked)
+                        
+                        Divider()
+                        
+                        Toggle("Show Full Location", isOn: $showVolume)
+                            .disabled(isSettingsLocked)
+                    }
+                    .padding()
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             }
             .padding()
             .background(.secondary.opacity(0.15))
@@ -265,15 +271,12 @@ struct PhysicalFlip: View {
                             .padding()
                             .font(.largeTitle.bold())
                             .frame(maxWidth: .infinity)
-                            .frame(maxHeight: .infinity)
                             .background(Color.accent)
                             .cornerRadius(30)
                             .tint(Color.white)
                     }
                 } else {
                     VStack {
-                        Spacer()
-                        
                         HStack {
                             Spacer()
                             Text("You must select at least one Standard Work to play")
@@ -281,12 +284,10 @@ struct PhysicalFlip: View {
                                 .multilineTextAlignment(.center)
                             Spacer()
                         }
-                        
-                        Spacer()
                     }
                     .padding()
-                    .background(.secondary.opacity(0.3))
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                    .background(.secondary.opacity(0.15))
+                    .frame(maxWidth: .infinity, alignment: .topLeading)
                     .cornerRadius(30)
                 }
             }

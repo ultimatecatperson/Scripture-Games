@@ -6,13 +6,8 @@
 
 import SwiftUI
 
-struct PhysicalFlip: View {
-    @State private var useOldTestament: Bool = true
-    @State private var useNewTestament: Bool = true
-    @State private var useBookOfMormon: Bool = true
-    @State private var useDoctrineAndCovenants: Bool = true
-    @State private var usePearlOfGreatPrice: Bool = true
-    @State private var showVolume: Bool = false
+struct FindTheTopic: View {
+    @State private var preventRepetitions: Bool = true
     @State private var isSettingsLocked: Bool = false
     
     @State private var score = 0
@@ -23,53 +18,56 @@ struct PhysicalFlip: View {
     @State private var completedLevels: Int = 0
     @State private var isPlaying: Bool = false
     
-    @State private var currentLocation: String = ""
-        
-    @State private var allowedVolumes: [Int] = []
+    @State private var currentTopic: String = ""
+    @State private var topicsUsed: [String] = []
     
-    func chooseRandomLocation() {
-        let randomVolume = allowedVolumes.randomElement()!
-        let randomBook = books[randomVolume].randomElement()!
-        let randomBookIndex = books[randomVolume].firstIndex(of: randomBook)!
-        let randomChapter = Int.random(in: 1...chapters[randomVolume][randomBookIndex])
+    func chooseRandomTopic() {
+        let randomTopic = topics.randomElement()!
         
-        currentLocation = "\(randomBook) \(randomChapter)\(showVolume ? "\n\(volumes[randomVolume])" : "")"
+        if preventRepetitions && topicsUsed.contains(randomTopic) {
+            chooseRandomTopic()
+        } else {
+            currentTopic = randomTopic
+            topicsUsed.append(currentTopic)
+        }
     }
     
-    var volumes: [String] = [
-        "Old Testament",
-        "New Testament",
-        "Book of Mormon",
-        "Doctrine and Covenants",
-        "Pearl of Great Price"
+    var topics: [String] = [
+        "Agency", "Atonement of Jesus Christ", "Baptism", "Charity", "Covenants",
+        "Faith", "Family History", "Grace", "Holy Ghost", "Jesus Christ",
+        "Plan of Salvation", "Prayer", "Priesthood", "Prophets", "Repentance",
+        "Restoration", "Revelation", "Service", "Temples", "Tithing",
+        "Adversity", "Articles of Faith", "Apostle", "Apostasy", "Armour of God",
+        "Baptism for the Dead", "Beattitudes", "Belief", "Benevolence", "Bishop",
+        "Book of Mormon", "Celestial Kingdom", "Chastity", "Children of God", "Christmas",
+        "Church Administration", "Commitment", "Compassion", "Confirmation", "Consecration",
+        "Cornerstone", "Creation", "Death, Physical", "Death, Spiritual", "Degrees of Glory",
+        "Dispensation", "Doctrine and Covenants", "Easter", "Education", "Endurance",
+        "Endure to the End", "Eternal Life", "Eternal Marriage", "Exaltation", "Fall of Adam and Eve",
+        "Family", "Fasting", "First Premortal Spirit Birth", "First Vision", "Forgiveness",
+        "Gadianton Robbers", "Gathering of Israel", "General Conference", "Gethsemane", "Gifts of the Spirit",
+        "Godhead", "Gospel", "Gratitude", "Happiness", "Healing",
+        "Heavenly Father", "Heavenly Mother", "Hell", "High Council", "Holiness",
+        "Honesty", "Hope", "Humility", "Immortality", "Individual Worth",
+        "Integrity", "Israel", "Joseph Smith", "Joy", "Judgment, The Last",
+        "Justice", "Kindness", "Knowledge", "Liahona", "Light of Christ",
+        "Living Prophets", "Love", "Marriage", "Melchizedek Priesthood", "Mercy",
+        "Millennium", "Ministering", "Miracles", "Missionary Work", "Modesty",
+        "Mortality", "Mortal Life", "New and Everlasting Covenant", "Obedience", "Ordinances",
+        "Original Sin", "Parables", "Paradise", "Patience", "Patriarchal Blessings",
+        "Peace", "Pearl of Great Price", "Perseverance", "Pioneer", "Postmortal Spirit World",
+        "Pre-earth Life", "Preparation", "Pride", "Priesthood Keys", "Priesthood Quorums",
+        "Primary", "Promised Land", "Prophecy", "Quorum of the Twelve Apostles", "Relief Society",
+        "Resurrection", "Reverence", "Sabbath Day", "Sacrament", "Sacrifice",
+        "Salvation", "Salvation for the Dead", "Scriptures", "Sealing", "Second Coming",
+        "Self-Reliance", "Sermon on the Mount", "Signs of the Times", "Sin", "Spirit of Prophecy",
+        "Spiritual Rebirth", "Stake", "Standard Works", "Stewardship", "Temple Endowment",
+        "Temple Ordinances", "Temple Work", "Ten Commandments", "Telestial Kingdom", "Terrestrial Kingdom",
+        "Testimony", "Tree of Life", "Tragedy", "Trust in God", "Truth",
+        "Unselfishness", "Virtue", "War in Heaven", "Ward", "Witness",
+        "Word of Wisdom", "Work", "Worship", "Zion"
     ]
-
-    var books: [[String]] = [
-        // Old Testament
-        ["Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy", "Joshua", "Judges", "Ruth", "1 Samuel", "2 Samuel", "1 Kings", "2 Kings", "1 Chronicles", "2 Chronicles", "Ezra", "Nehemiah", "Esther", "Job", "Psalms", "Proverbs", "Ecclesiastes", "Solomon's Song", "Isaiah", "Jeremiah", "Lamentations", "Ezekiel", "Daniel", "Hosea", "Joel", "Amos", "Obadiah", "Jonah", "Micah", "Nahum", "Habakkuk", "Zephaniah", "Haggai", "Zechariah", "Malachi"],
-        // New Testament
-        ["Matthew", "Mark", "Luke", "John", "Acts", "Romans", "1 Corinthians", "2 Corinthians", "Galatians", "Ephesians", "Philippians", "Colossians", "1 Thessalonians", "2 Thessalonians", "1 Timothy", "2 Timothy", "Titus", "Philemon", "Hebrews", "James", "1 Peter", "2 Peter", "1 John", "2 John", "3 John", "Jude", "Revelation"],
-        // Book of Mormon
-        ["1 Nephi", "2 Nephi", "Jacob", "Enos", "Jarom", "Omni", "Words of Mormon", "Mosiah", "Alma", "Helaman", "3 Nephi", "4 Nephi", "Mormon", "Ether", "Moroni"],
-        // Doctrine and Covenants
-        ["Doctrine and Covenants", "Official Declarations"],
-        // Pearl of Great Price
-        ["Moses", "Abraham", "Joseph Smith—Matthew", "Joseph Smith—History", "Articles of Faith"]
-    ]
-
-    var chapters: [[Int]] = [
-        // Old Testament Chapters
-        [50, 40, 27, 36, 34, 24, 21, 4, 31, 24, 22, 25, 29, 36, 10, 13, 10, 42, 150, 31, 12, 8, 66, 52, 5, 48, 12, 14, 3, 9, 1, 4, 7, 3, 3, 3, 2, 14, 4],
-        // New Testament Chapters
-        [28, 16, 24, 21, 28, 16, 16, 13, 6, 6, 4, 4, 5, 3, 6, 4, 3, 1, 13, 5, 5, 3, 5, 1, 1, 1, 22],
-        // Book of Mormon Chapters
-        [22, 33, 7, 1, 1, 1, 1, 29, 63, 16, 30, 1, 9, 15, 10],
-        // Doctrine and Covenants Sections/Declarations
-        [138, 2],
-        // Pearl of Great Price Chapters
-        [8, 5, 1, 1, 1]
-    ]
-        
+    
     var body: some View {
         NavigationStack {
             setup
@@ -82,7 +80,7 @@ struct PhysicalFlip: View {
                 VStack {
                     Spacer()
                     
-                    Text(currentLocation)
+                    Text(currentTopic)
                         .font(.system(size: 45))
                         .fontWeight(.heavy)
                         .fontDesign(.monospaced)
@@ -103,7 +101,7 @@ struct PhysicalFlip: View {
                     
                     if isPlaying {
                         VStack {
-                            Text("\(completedLevels + 1) / 10")
+                            Text("\(completedLevels + 1) / 5")
                                 .font(.system(size: 30))
                                 .fontWeight(.bold)
                                 .fontDesign(.default)
@@ -126,20 +124,20 @@ struct PhysicalFlip: View {
                     if isPlaying {
                         Button {
                             completedLevels += 1
-                            score += 100
+                            score += 200
                             
-                            if completedLevels == 10 {
+                            if completedLevels == 5 {
                                 isPlaying = false
                                 elapsedTime = Date().timeIntervalSince(startTime!)
                                 
-                                score -= Int(elapsedTime * 2)
+                                score -= Int(elapsedTime * 4)
                                 
                                 if score > bestScore {
                                     bestScore = score
                                 }
                                 recentScore = score
                             } else {
-                                chooseRandomLocation()
+                                chooseRandomTopic()
                             }
                         } label: {
                             Image(systemName: "checkmark")
@@ -158,71 +156,86 @@ struct PhysicalFlip: View {
         .onAppear {
             completedLevels = 0
             score = 0
-            allowedVolumes = []
-            if useOldTestament {
-                allowedVolumes.append(0)
-            }
-            if useNewTestament {
-                allowedVolumes.append(1)
-            }
-            if useBookOfMormon {
-                allowedVolumes.append(2)
-            }
-            if useDoctrineAndCovenants {
-                allowedVolumes.append(3)
-            }
-            if usePearlOfGreatPrice {
-                allowedVolumes.append(4)
-            }
+            topicsUsed = []
             
             isPlaying = true
             startTime = Date()
             
-            chooseRandomLocation()
+            chooseRandomTopic()
         }
     }
-    
-    private var setup: some View {
+        
+    var setup: some View {
         HStack {
-            VStack(alignment: .leading, spacing: 20) {
-                Group {
-                    if isSettingsLocked {
-                        Button {
-                            isSettingsLocked = false
-                        } label: {
-                            Image(systemName: "lock.fill")
+            VStack {
+                VStack(alignment: .leading, spacing: 20) {
+                    Group {
+                        if isSettingsLocked {
+                            Button {
+                                isSettingsLocked = false
+                            } label: {
+                                Image(systemName: "lock.fill")
+                            }
+                            .buttonStyle(BorderedProminentButtonStyle())
+                        } else {
+                            Button {
+                                isSettingsLocked = true
+                            } label: {
+                                Image(systemName: "lock.open.fill")
+                            }
+                            .buttonStyle(BorderedButtonStyle())
                         }
-                        .buttonStyle(BorderedProminentButtonStyle())
-                    } else {
-                        Button {
-                            isSettingsLocked = true
-                        } label: {
-                            Image(systemName: "lock.open.fill")
+                    }
+                    
+                    Toggle("Prevent Repetitions", isOn: $preventRepetitions)
+                        .disabled(isSettingsLocked)
+                }
+                .padding()
+                .background(.secondary.opacity(0.15))
+                .frame(maxWidth: .infinity, alignment: .topLeading)
+                .cornerRadius(30)
+                
+                VStack(alignment: .leading, spacing: 20) {
+                    VStack(alignment: .leading) {
+                        Label("Recent topics", systemImage: "book.closed")
+                            .font(.title2.bold())
+                        
+                        if !topicsUsed.isEmpty {
+                            ScrollView {
+                                VStack(alignment: .leading, spacing: 8) {
+                                    ForEach(topicsUsed, id: \.self) { topic in
+                                        Text(topic)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                    }
+                                }
+                                .padding(.vertical, 4)
+                            }
+                            .padding()
+                            .background(.background)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                            .cornerRadius(30)
+                        } else {
+                            VStack(alignment: .leading, spacing: 8) {
+                                HStack {
+                                    Label("You need to play at least once to see recent topics", systemImage: "exclamationmark.circle")
+                                    
+                                    Spacer()
+                                }
+                                
+                                Spacer()
+                            }
+                            .padding()
+                            .background(.background)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                            .cornerRadius(30)
                         }
-                        .buttonStyle(BorderedButtonStyle())
                     }
                 }
-                
-                Toggle("Use Old Testament", isOn: $useOldTestament)
-                    .disabled(isSettingsLocked)
-                Toggle("Use New Testament", isOn: $useNewTestament)
-                    .disabled(isSettingsLocked)
-                Toggle("Use Book of Mormon", isOn: $useBookOfMormon)
-                    .disabled(isSettingsLocked)
-                Toggle("Use Doctrine and Covenants", isOn: $useDoctrineAndCovenants)
-                    .disabled(isSettingsLocked)
-                Toggle("Use Pearl of Great Price", isOn: $usePearlOfGreatPrice)
-                    .disabled(isSettingsLocked)
-                
-                Spacer()
-                
-                Toggle("Show Full Location", isOn: $showVolume)
-                    .disabled(isSettingsLocked)
+                .padding()
+                .background(.secondary.opacity(0.15))
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                .cornerRadius(30)
             }
-            .padding()
-            .background(.secondary.opacity(0.15))
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-            .cornerRadius(30)
             
             VStack {
                 VStack(alignment: .leading, spacing: 20) {
@@ -259,35 +272,16 @@ struct PhysicalFlip: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                 .cornerRadius(30)
                 
-                if useOldTestament || useNewTestament || useBookOfMormon || useDoctrineAndCovenants || usePearlOfGreatPrice {
+                if true {
                     NavigationLink(destination: game) {
                         Label("Start", systemImage: "play.fill")
                             .padding()
                             .font(.largeTitle.bold())
                             .frame(maxWidth: .infinity)
-                            .frame(maxHeight: .infinity)
                             .background(Color.accent)
                             .cornerRadius(30)
                             .tint(Color.white)
                     }
-                } else {
-                    VStack {
-                        Spacer()
-                        
-                        HStack {
-                            Spacer()
-                            Text("You must select at least one Standard Work to play")
-                                .foregroundStyle(.red)
-                                .multilineTextAlignment(.center)
-                            Spacer()
-                        }
-                        
-                        Spacer()
-                    }
-                    .padding()
-                    .background(.secondary.opacity(0.3))
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                    .cornerRadius(30)
                 }
             }
         }
@@ -295,6 +289,7 @@ struct PhysicalFlip: View {
     }
 }
 
+
 #Preview {
-    PhysicalFlip()
+    FindTheTopic()
 }
