@@ -31,7 +31,7 @@ struct PhysicalFlip: View {
         let randomVolume = allowedVolumes.randomElement()!
         let randomBook = books[randomVolume].randomElement()!
         let randomBookIndex = books[randomVolume].firstIndex(of: randomBook)!
-        let randomChapter = Int.random(in: 1...chapters[randomVolumeIndex][randomBookIndex])
+        let randomChapter = Int.random(in: 1...chapters[randomVolume][randomBookIndex])
         
         currentLocation = "\(randomBook) \(randomChapter)\(showVolume ? "\n\(volumes[randomVolume])" : "")"
     }
