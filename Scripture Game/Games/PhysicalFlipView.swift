@@ -254,7 +254,7 @@ struct PhysicalFlip: View {
                             .font(.system(size: 30, design: .monospaced))
                     }
                     
-                    Text("Best and Recent scores are deleted when the app is closed.")
+                    Text("Best and Recent scores are deleted when you leave the game.")
                         .multilineTextAlignment(.leading)
                         .font(.caption)
                     

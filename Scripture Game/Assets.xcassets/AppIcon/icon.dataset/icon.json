@@ -1,0 +1,117 @@
+{
+  "fill" : {
+    "automatic-gradient" : "display-p3:0.96783,0.35893,0.03667,1.00000"
+  },
+  "groups" : [
+    {
+      "blur-material" : null,
+      "layers" : [
+        {
+          "fill-specializations" : [
+            {
+              "value" : {
+                "linear-gradient" : [
+                  "display-p3:1.06259,0.52668,0.28707,1.00000",
+                  "display-p3:0.98584,0.39038,0.12415,1.00000"
+                ],
+                "orientation" : {
+                  "start" : {
+                    "x" : 0.5,
+                    "y" : -6.560063559322025
+                  },
+                  "stop" : {
+                    "x" : 0.5,
+                    "y" : 11.224420160570906
+                  }
+                }
+              }
+            },
+            {
+              "appearance" : "dark",
+              "value" : {
+                "automatic-gradient" : "srgb:1.00000,1.00000,1.00000,1.00000",
+                "orientation" : {
+                  "start" : {
+                    "x" : 0.5,
+                    "y" : -6.560063559322025
+                  },
+                  "stop" : {
+                    "x" : 0.5,
+                    "y" : 11.224420160570906
+                  }
+                }
+              }
+            }
+          ],
+          "image-name" : "Untitled 5.svg",
+          "name" : "Untitled 5",
+          "position" : {
+            "scale" : 0.59,
+            "translation-in-points" : [
+              100.24536149999994,
+              -101.640625
+            ]
+          }
+        }
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 1
+      },
+      "specular" : false,
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.8
+      }
+    },
+    {
+      "blur-material" : null,
+      "layers" : [
+        {
+          "image-name" : "Untitled 4.svg",
+          "name" : "Untitled 4",
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [
+              100,
+              0
+            ]
+          }
+        },
+        {
+          "image-name" : "Untitled 4.svg",
+          "name" : "Untitled 4",
+          "opacity" : 0.67
+        },
+        {
+          "image-name" : "Untitled 4.svg",
+          "name" : "Untitled 4",
+          "opacity" : 0.33,
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [
+              -100,
+              0
+            ]
+          }
+        }
+      ],
+      "lighting" : "individual",
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 1
+      },
+      "specular" : true,
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "circles" : [
+      "watchOS"
+    ],
+    "squares" : "shared"
+  }
+}
